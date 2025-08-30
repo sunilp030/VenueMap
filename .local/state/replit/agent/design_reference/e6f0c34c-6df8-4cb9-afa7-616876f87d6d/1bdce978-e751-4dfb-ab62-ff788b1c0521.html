@@ -1,0 +1,475 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MapNav Pro - Indoor Navigation Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a'
+                        }
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- @COMPONENT: Header [navigation and branding] -->
+    <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-8">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-map-marked-alt text-white text-sm"></i>
+                        </div>
+                        <h1 class="text-xl font-bold text-gray-900">MapNav Pro</h1>
+                    </div>
+                    <nav class="hidden md:flex space-x-6">
+                        <a href="#" class="text-primary-600 font-medium border-b-2 border-primary-600 pb-4">Editor</a>
+                        <a href="#" class="text-gray-500 hover:text-gray-700 pb-4">Navigator</a>
+                        <a href="#" class="text-gray-500 hover:text-gray-700 pb-4">Analytics</a>
+                    </nav>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+                        <span class="text-primary-600 text-sm font-medium">JD</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- @END_COMPONENT: Header -->
+
+    <div class="flex h-screen pt-16">
+        <!-- @COMPONENT: Sidebar [tools and controls] -->
+        <div class="w-80 bg-white shadow-lg border-r border-gray-200 flex flex-col">
+            <!-- Tool Palette -->
+            <div class="p-4 border-b border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Tools</h2>
+                <div class="grid grid-cols-3 gap-2">
+                    <button class="p-3 bg-primary-50 border-2 border-primary-200 rounded-lg hover:bg-primary-100 transition-colors" data-event="click:selectTool" data-implementation="Should activate selection mode">
+                        <i class="fas fa-mouse-pointer text-primary-600"></i>
+                        <span class="block text-xs text-primary-700 mt-1">Select</span>
+                    </button>
+                    <button class="p-3 bg-gray-50 border-2 border-gray-200 rounded-lg hover:bg-gray-100 transition-colors" data-event="click:selectTool" data-implementation="Should activate POI placement mode">
+                        <i class="fas fa-map-pin text-gray-600"></i>
+                        <span class="block text-xs text-gray-700 mt-1">POI</span>
+                    </button>
+                    <button class="p-3 bg-gray-50 border-2 border-gray-200 rounded-lg hover:bg-gray-100 transition-colors" data-event="click:selectTool" data-implementation="Should activate path drawing mode">
+                        <i class="fas fa-route text-gray-600"></i>
+                        <span class="block text-xs text-gray-700 mt-1">Path</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Floor Plans -->
+            <div class="p-4 border-b border-gray-200">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-md font-semibold text-gray-900">Floor Plans</h3>
+                    <button class="text-primary-600 hover:text-primary-700" data-event="click:uploadFloorPlan" data-implementation="Should open file upload dialog">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="space-y-2">
+                    <!-- @MAP: floorPlans.map(plan => ( -->
+                    <div class="p-3 bg-primary-50 border border-primary-200 rounded-lg cursor-pointer hover:bg-primary-100 transition-colors" data-mock="true">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-building text-primary-600"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-gray-900" data-bind="plan.name">Ground Floor</div>
+                                <div class="text-xs text-gray-500" data-bind="plan.size">2400 x 1800 px</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-gray-50 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors" data-mock="true">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-building text-gray-600"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-gray-900" data-bind="plan.name">Second Floor</div>
+                                <div class="text-xs text-gray-500" data-bind="plan.size">2400 x 1800 px</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- @END_MAP )) -->
+                </div>
+            </div>
+
+            <!-- POI Categories -->
+            <div class="p-4 flex-1 overflow-y-auto">
+                <h3 class="text-md font-semibold text-gray-900 mb-4">POI Categories</h3>
+                <div class="space-y-3">
+                    <!-- @MAP: categories.map(category => ( -->
+                    <div class="space-y-2" data-mock="true">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-4 h-4 bg-green-500 rounded-full"></div>
+                                <span class="text-sm font-medium text-gray-700" data-bind="category.name">Stores</span>
+                            </div>
+                            <span class="text-xs text-gray-500" data-bind="category.count">24</span>
+                        </div>
+                        <div class="ml-6 space-y-1">
+                            <div class="text-xs text-gray-600 cursor-pointer hover:text-gray-800" data-bind="subcategory.name" data-mock="true">Clothing</div>
+                            <div class="text-xs text-gray-600 cursor-pointer hover:text-gray-800" data-bind="subcategory.name" data-mock="true">Electronics</div>
+                            <div class="text-xs text-gray-600 cursor-pointer hover:text-gray-800" data-bind="subcategory.name" data-mock="true">Food & Dining</div>
+                        </div>
+                    </div>
+                    <div class="space-y-2" data-mock="true">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-4 h-4 bg-blue-500 rounded-full"></div>
+                                <span class="text-sm font-medium text-gray-700" data-bind="category.name">Services</span>
+                            </div>
+                            <span class="text-xs text-gray-500" data-bind="category.count">12</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2" data-mock="true">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-4 h-4 bg-orange-500 rounded-full"></div>
+                                <span class="text-sm font-medium text-gray-700" data-bind="category.name">Amenities</span>
+                            </div>
+                            <span class="text-xs text-gray-500" data-bind="category.count">8</span>
+                        </div>
+                    </div>
+                    <!-- @END_MAP )) -->
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="p-4 border-t border-gray-200">
+                <div class="space-y-2">
+                    <button class="w-full bg-primary-600 text-white py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors" data-event="click:saveMap" data-implementation="Should save current map state">
+                        <i class="fas fa-save mr-2"></i>Save Changes
+                    </button>
+                    <button class="w-full bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors" data-event="click:publishMap" data-implementation="Should publish map for navigation">
+                        <i class="fas fa-globe mr-2"></i>Publish Map
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: Sidebar -->
+
+        <!-- @COMPONENT: MainCanvas [map editor and navigation] -->
+        <div class="flex-1 flex flex-col">
+            <!-- Top Controls -->
+            <div class="bg-white border-b border-gray-200 p-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2">
+                            <button class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" data-event="click:zoomOut" data-implementation="Should decrease map zoom level">
+                                <i class="fas fa-search-minus text-gray-600"></i>
+                            </button>
+                            <span class="text-sm text-gray-600 px-2" data-bind="zoomLevel" data-mock="true">100%</span>
+                            <button class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" data-event="click:zoomIn" data-implementation="Should increase map zoom level">
+                                <i class="fas fa-search-plus text-gray-600"></i>
+                            </button>
+                        </div>
+                        <div class="w-px h-6 bg-gray-300"></div>
+                        <button class="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors" data-event="click:resetView" data-implementation="Should reset map to center and default zoom">
+                            <i class="fas fa-expand-arrows-alt text-gray-600"></i>
+                        </button>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-2 bg-gray-50 rounded-lg p-2">
+                            <label class="text-sm text-gray-600">Grid:</label>
+                            <input type="checkbox" class="rounded border-gray-300" checked data-implementation="Should toggle grid overlay">
+                        </div>
+                        <div class="flex items-center space-x-2 bg-gray-50 rounded-lg p-2">
+                            <label class="text-sm text-gray-600">Snap:</label>
+                            <input type="checkbox" class="rounded border-gray-300" checked data-implementation="Should enable snap-to-grid">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Canvas Area -->
+            <div class="flex-1 relative overflow-hidden bg-gray-100">
+                <!-- @FUNCTIONALITY: This canvas should implement interactive floor plan editing with zoom, pan, and drag-and-drop POI placement -->
+                <div class="absolute inset-0" id="mapCanvas" data-implementation="Should be replaced with HTML5 Canvas or SVG for map rendering">
+                    <!-- Simulated Mall Floor Plan -->
+                    <!-- A modern shopping mall floor plan with stores, corridors, and navigation paths -->
+                    <div class="w-full h-full relative" style="background-image: url('https://pixabay.com/get/g5fe1e4dfb932b352425641d595695cde8096887fc7bd13f99a76ab1751680633c6eccaefaabf2d69223f3da7b66984c0955fb9aa97bb784aa35b89a8a786c19d_1280.jpg'); background-size: contain; background-repeat: no-repeat; background-position: center;">
+                        <!-- POI Markers -->
+                        <!-- @MAP: pois.map(poi => ( -->
+                        <div class="absolute w-8 h-8 bg-green-500 rounded-full border-2 border-white shadow-lg cursor-pointer hover:scale-110 transition-transform" style="top: 20%; left: 15%;" data-mock="true" data-bind="poi.position" data-implementation="Should be draggable and show POI details on click">
+                            <i class="fas fa-store text-white text-xs absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>
+                            <div class="absolute top-10 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 opacity-0 hover:opacity-100 transition-opacity whitespace-nowrap">
+                                <div class="text-xs font-medium text-gray-900" data-bind="poi.name">Apple Store</div>
+                                <div class="text-xs text-gray-500" data-bind="poi.category">Electronics</div>
+                            </div>
+                        </div>
+                        
+                        <div class="absolute w-8 h-8 bg-blue-500 rounded-full border-2 border-white shadow-lg cursor-pointer hover:scale-110 transition-transform" style="top: 35%; left: 30%;" data-mock="true">
+                            <i class="fas fa-utensils text-white text-xs absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>
+                            <div class="absolute top-10 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 opacity-0 hover:opacity-100 transition-opacity whitespace-nowrap">
+                                <div class="text-xs font-medium text-gray-900" data-bind="poi.name">Food Court</div>
+                                <div class="text-xs text-gray-500" data-bind="poi.category">Dining</div>
+                            </div>
+                        </div>
+                        
+                        <div class="absolute w-8 h-8 bg-orange-500 rounded-full border-2 border-white shadow-lg cursor-pointer hover:scale-110 transition-transform" style="top: 60%; left: 70%;" data-mock="true">
+                            <i class="fas fa-restroom text-white text-xs absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>
+                            <div class="absolute top-10 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 opacity-0 hover:opacity-100 transition-opacity whitespace-nowrap">
+                                <div class="text-xs font-medium text-gray-900" data-bind="poi.name">Restrooms</div>
+                                <div class="text-xs text-gray-500" data-bind="poi.category">Amenities</div>
+                            </div>
+                        </div>
+
+                        <div class="absolute w-8 h-8 bg-purple-500 rounded-full border-2 border-white shadow-lg cursor-pointer hover:scale-110 transition-transform" style="top: 45%; left: 60%;" data-mock="true">
+                            <i class="fas fa-tshirt text-white text-xs absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></i>
+                            <div class="absolute top-10 left-1/2 transform -translate-x-1/2 bg-white rounded-lg shadow-lg p-2 opacity-0 hover:opacity-100 transition-opacity whitespace-nowrap">
+                                <div class="text-xs font-medium text-gray-900" data-bind="poi.name">H&M</div>
+                                <div class="text-xs text-gray-500" data-bind="poi.category">Clothing</div>
+                            </div>
+                        </div>
+                        <!-- @END_MAP )) -->
+
+                        <!-- Navigation Path (example) -->
+                        <svg class="absolute inset-0 w-full h-full pointer-events-none" data-implementation="Should render dynamic paths based on route calculations">
+                            <defs>
+                                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                    <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6" />
+                                </marker>
+                            </defs>
+                            <path d="M 15% 20% Q 25% 30% 30% 35%" stroke="#3b82f6" stroke-width="3" fill="none" stroke-dasharray="5,5" marker-end="url(#arrowhead)" opacity="0.8" data-mock="true" data-implementation="Should be calculated dynamically based on start/end points">
+                                <animate attributeName="stroke-dashoffset" values="10;0" dur="1s" repeatCount="indefinite"/>
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Floating Navigation Panel -->
+                <div class="absolute top-4 right-4 bg-white rounded-lg shadow-lg p-4 w-80" data-implementation="Should show route information and turn-by-turn directions">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-900">Navigation</h3>
+                        <button class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                            <div class="flex-1">
+                                <input type="text" placeholder="Starting point" value="Main Entrance" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" data-mock="true" data-implementation="Should support autocomplete for POI search">
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                            <div class="flex-1">
+                                <input type="text" placeholder="Destination" value="Apple Store" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm" data-mock="true" data-implementation="Should support autocomplete for POI search">
+                            </div>
+                        </div>
+                        
+                        <button class="w-full bg-primary-600 text-white py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors" data-event="click:calculateRoute" data-implementation="Should calculate and display optimal route">
+                            <i class="fas fa-route mr-2"></i>Find Route
+                        </button>
+                        
+                        <div class="border-t border-gray-200 pt-4" data-mock="true">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm text-gray-600">Estimated Time:</span>
+                                <span class="text-sm font-medium text-gray-900" data-bind="route.estimatedTime">3 min</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">Distance:</span>
+                                <span class="text-sm font-medium text-gray-900" data-bind="route.distance">125 m</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Navigation Controls -->
+                <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 md:hidden bg-white rounded-full shadow-lg p-2 flex items-center space-x-2">
+                    <button class="w-10 h-10 bg-primary-600 text-white rounded-full hover:bg-primary-700 transition-colors" data-event="click:currentLocation" data-implementation="Should center map on user's current location">
+                        <i class="fas fa-location-arrow text-sm"></i>
+                    </button>
+                    <button class="w-10 h-10 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors" data-event="click:search" data-implementation="Should open search overlay">
+                        <i class="fas fa-search text-sm"></i>
+                    </button>
+                    <button class="w-10 h-10 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition-colors" data-event="click:layers" data-implementation="Should toggle floor selector">
+                        <i class="fas fa-layer-group text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: MainCanvas -->
+    </div>
+
+    <!-- @COMPONENT: POIModal [POI editing interface] -->
+    <div id="poiModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden" data-implementation="Should show/hide based on POI selection">
+        <div class="bg-white rounded-lg shadow-xl w-96 max-w-90vw">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Edit POI</h3>
+                    <button class="text-gray-400 hover:text-gray-600" data-event="click:closeModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <form class="space-y-4" data-implementation="Should handle POI creation/editing">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                        <input type="text" value="Apple Store" class="w-full border border-gray-300 rounded-lg px-3 py-2" data-mock="true" data-bind="poi.name">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                        <select class="w-full border border-gray-300 rounded-lg px-3 py-2" data-bind="poi.category">
+                            <option value="electronics" selected>Electronics</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="dining">Dining</option>
+                            <option value="services">Services</option>
+                            <option value="amenities">Amenities</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                        <textarea rows="3" class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Brief description..." data-bind="poi.description" data-mock="true">Premium electronics and accessories store</textarea>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Floor</label>
+                            <select class="w-full border border-gray-300 rounded-lg px-3 py-2" data-bind="poi.floor">
+                                <option value="ground" selected>Ground Floor</option>
+                                <option value="second">Second Floor</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Icon Color</label>
+                            <input type="color" value="#10b981" class="w-full border border-gray-300 rounded-lg h-10" data-bind="poi.color">
+                        </div>
+                    </div>
+                    
+                    <div class="flex space-x-3 pt-4">
+                        <button type="button" class="flex-1 bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors" data-event="click:closeModal">
+                            Cancel
+                        </button>
+                        <button type="submit" class="flex-1 bg-primary-600 text-white py-2 px-4 rounded-lg hover:bg-primary-700 transition-colors" data-event="submit:savePOI" data-implementation="Should save POI data and update map">
+                            Save POI
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: POIModal -->
+
+    <!-- @COMPONENT: SearchOverlay [mobile search interface] -->
+    <div id="searchOverlay" class="fixed inset-0 bg-white z-50 hidden md:hidden" data-implementation="Should show/hide based on search button click">
+        <div class="p-4">
+            <div class="flex items-center space-x-3 mb-4">
+                <button class="text-gray-600" data-event="click:closeSearch">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <input type="text" placeholder="Search for stores, services..." class="flex-1 border border-gray-300 rounded-lg px-4 py-3" data-implementation="Should provide real-time search results">
+            </div>
+            
+            <div class="space-y-3">
+                <!-- @MAP: searchResults.map(result => ( -->
+                <div class="flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer" data-mock="true" data-bind="result" data-event="click:selectSearchResult">
+                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-store text-green-600"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-medium text-gray-900" data-bind="result.name">Apple Store</div>
+                        <div class="text-sm text-gray-500" data-bind="result.category">Electronics • Ground Floor</div>
+                    </div>
+                    <i class="fas fa-chevron-right text-gray-400"></i>
+                </div>
+                <!-- @END_MAP )) -->
+            </div>
+        </div>
+    </div>
+    <!-- @END_COMPONENT: SearchOverlay -->
+
+    <script>
+        // TODO: Implement business logic, API calls, and state management
+        (function() {
+            // Basic interaction handlers for demo purposes
+            
+            // Tool selection
+            document.querySelectorAll('[data-event*="selectTool"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active state from all tool buttons
+                    document.querySelectorAll('[data-event*="selectTool"]').forEach(btn => {
+                        btn.className = btn.className.replace(/bg-primary-\d+/, 'bg-gray-50').replace(/border-primary-\d+/, 'border-gray-200');
+                    });
+                    // Add active state to clicked button
+                    this.className = this.className.replace(/bg-gray-\d+/, 'bg-primary-50').replace(/border-gray-\d+/, 'border-primary-200');
+                });
+            });
+
+            // POI marker interactions
+            document.querySelectorAll('[data-mock="true"][style*="position"]').forEach(marker => {
+                marker.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    // Show POI modal
+                    document.getElementById('poiModal').classList.remove('hidden');
+                });
+            });
+
+            // Modal close handlers
+            document.querySelectorAll('[data-event*="closeModal"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.getElementById('poiModal').classList.add('hidden');
+                });
+            });
+
+            // Mobile search overlay
+            document.querySelectorAll('[data-event*="search"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.getElementById('searchOverlay').classList.remove('hidden');
+                });
+            });
+
+            document.querySelectorAll('[data-event*="closeSearch"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.getElementById('searchOverlay').classList.add('hidden');
+                });
+            });
+
+            // Close modal when clicking outside
+            document.getElementById('poiModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                }
+            });
+
+            // Zoom controls
+            document.querySelectorAll('[data-event*="zoom"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Zoom functionality would be implemented here
+                    console.log('Zoom action:', this.dataset.event);
+                });
+            });
+
+        })();
+    </script>
+</body>
+</html>
