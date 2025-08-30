@@ -9,7 +9,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 export default function Home() {
   const [activeTab, setActiveTab] = useState("editor");
   const [showSearch, setShowSearch] = useState(false);
-  const [selectedFloorPlan, setSelectedFloorPlan] = useState<string>("sample-mall");
+  const [selectedFloorPlan, setSelectedFloorPlan] = useState<string>("exhibition-halls");
   const isMobile = useIsMobile();
 
   const { data: floorPlans, isLoading: floorPlansLoading } = useQuery<FloorPlan[]>({
@@ -22,10 +22,13 @@ export default function Home() {
   });
 
   const categories = [
-    { name: "Stores", color: "bg-green-500", count: pois?.filter(p => p.category === "electronics" || p.category === "clothing").length || 0 },
-    { name: "Dining", color: "bg-yellow-500", count: pois?.filter(p => p.category === "dining").length || 0 },
-    { name: "Services", color: "bg-blue-500", count: pois?.filter(p => p.category === "services").length || 0 },
-    { name: "Amenities", color: "bg-orange-500", count: pois?.filter(p => p.category === "amenities").length || 0 },
+    { name: "Booths", color: "bg-blue-500", count: pois?.filter(p => p.category === "booth").length || 0 },
+    { name: "Entrances", color: "bg-gray-500", count: pois?.filter(p => p.category === "entrance").length || 0 },
+    { name: "Facilities", color: "bg-green-500", count: pois?.filter(p => p.category === "facility").length || 0 },
+    { name: "Hall 9", color: "bg-red-500", count: pois?.filter(p => p.subcategory === "hall-9").length || 0 },
+    { name: "Hall 10", color: "bg-yellow-500", count: pois?.filter(p => p.subcategory === "hall-10").length || 0 },
+    { name: "Hall 11", color: "bg-green-500", count: pois?.filter(p => p.subcategory === "hall-11").length || 0 },
+    { name: "Hall 12", color: "bg-blue-500", count: pois?.filter(p => p.subcategory === "hall-12").length || 0 },
   ];
 
   if (floorPlansLoading) {
